@@ -1,5 +1,8 @@
 package network.commercio.sacco
 
+/**
+ * Contains all the information about a single Cosmos-SDK based chain.
+ */
 data class NetworkInfo(
     val id: String,
     val bech32Hrp: String,

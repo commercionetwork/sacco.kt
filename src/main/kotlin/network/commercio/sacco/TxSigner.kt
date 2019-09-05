@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.encoding.toBase64
 import network.commercio.sacco.models.account.AccountData
 import network.commercio.sacco.models.types.*
-import network.commercio.sacco.utils.ChainRepository
+import network.commercio.sacco.utils.LCDService
 
 /**
  * Allows to easily sign a [StdTx] object that already contains a message.
@@ -21,7 +21,7 @@ object TxSigner {
      */
     suspend fun signStdTx(wallet: Wallet, stdTx: StdTx): StdTx {
         // Get the account data from the network
-        val account = ChainRepository.getAccountData(wallet)
+        val account = LCDService.getAccountData(wallet)
 
         // Sign each message
         val signatures = stdTx.messages.map { msg ->

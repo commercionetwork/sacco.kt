@@ -1,7 +1,7 @@
 package network.commercio.sacco
 
 import network.commercio.sacco.models.types.StdTx
-import network.commercio.sacco.utils.ChainRepository
+import network.commercio.sacco.utils.LCDService
 
 /**
  * Allows to easily send a [StdTx] using the data contained
@@ -15,6 +15,6 @@ object TxSender {
      * and exception if an error is risen during the sending.
      */
     suspend fun broadcastStdTx(wallet: Wallet, stdTx: StdTx): String {
-        return ChainRepository.postTx(wallet, stdTx)
+        return LCDService.postTx(wallet, stdTx)
     }
 }

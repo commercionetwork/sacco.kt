@@ -1,16 +1,7 @@
 package network.commercio.sacco.encoding
 
-import kotlinx.io.charsets.Charsets
-import kotlinx.io.core.String
-import kotlinx.io.core.toByteArray
 import java.io.ByteArrayOutputStream
 
-/**
- * Encodes [this] string value into its Base64 representation.
- */
-fun String.toBase64(): String {
-    return this.toByteArray(Charsets.UTF_8).toBase64()
-}
 
 /**
  * Converts [this] [ByteArray] value into its Base64 string representation.

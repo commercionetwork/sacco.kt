@@ -7,7 +7,7 @@ import network.commercio.sacco.models.account.AccountData
 import network.commercio.sacco.models.messages.MsgSend
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
-import network.commercio.sacco.utils.ChainRepository
+import network.commercio.sacco.utils.LCDService
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -38,8 +38,8 @@ class TxSignerTests {
         // Create a wallet
         val wallet = Wallet.derive(mnemonic, derivationPath, networkInfo)
 
-        mockkObject(ChainRepository) {
-            coEvery { ChainRepository.getAccountData(any()) } returns AccountData(
+        mockkObject(LCDService) {
+            coEvery { LCDService.getAccountData(any()) } returns AccountData(
                 accountNumber = "0",
                 sequence = "0",
                 coins = listOf()
