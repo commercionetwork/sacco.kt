@@ -1,12 +1,7 @@
 language: java
 
-branches:
-  only:
-    - master
-    - /^release.*$/
-
 jdk:
-  - oraclejdk8
+  - oraclejdk9
 
 before_install:
   - chmod +x gradlew
