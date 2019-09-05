@@ -1,5 +1,9 @@
 ![](.img/logo.jpg)
 
+![Travis (.org)](https://img.shields.io/travis/commercionetwork/sacco.kt)
+![](https://img.shields.io/badge/compatible-Kotlin-blue)
+![](https://img.shields.io/badge/compatible-JVM-blue)
+
 Sacco.kt is a Kotlin-JVM library that allows you to easily perform some operations related to the
 [Cosmos.network](https://cosmos.network) ecosystem. This includes:
 
