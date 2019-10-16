@@ -1,0 +1,28 @@
+apply from: rootProject.file('gradle/dokka.gradle')
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = "sacco.kt"
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                name = 'Sacco.kt'
+                description = 'A cryptographic library that allows easy creation, signing and sending of Cosmos Network transactions'
+                url = 'https://github.com/commercionetwork/sacco.kt'
+                licenses {
+                    license {
+                        name = 'The MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}
