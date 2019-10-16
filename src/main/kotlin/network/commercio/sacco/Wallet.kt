@@ -31,7 +31,7 @@ data class Wallet internal constructor(
         }
 
     /**
-     * [ECKey] instance associated to this wallet.
+     * `ECKey` instance associated to this wallet.
      */
     val ecKey: ECKey
         get() {

@@ -16,7 +16,7 @@ object TxSigner {
     /**
      * Signs the given [stdTx] using the data contained inside the given [wallet].
      *
-     * NOTE. This method is [suspend] because it needs to ask the network in order to get the current account
+     * NOTE. This method is `suspend` because it needs to ask the network in order to get the current account
      * number and sequence number when composing the message signature.
      */
     suspend fun signStdTx(wallet: Wallet, stdTx: StdTx): StdTx {
