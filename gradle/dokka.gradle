@@ -19,11 +19,11 @@ task dokkaJavadoc(type: dokka.getClass()) {
         defaultKotlinTasks().findAll { it.name.contains("Jvm") }
     }
 
-    linkMapping {
-        dir = "src/main/kotlin"
-        url = "https://github.com/commercionetwork/sacco.kt/tree/master/src/main/kotlin"
-        suffix = "#L"
-    }
+//    linkMapping {
+//        dir = "src/main/kotlin"
+//        url = "https://github.com/commercionetwork/sacco.kt/tree/master/src/main/kotlin"
+//        suffix = "#L"
+//    }
 
     reportUndocumented = false
 }
