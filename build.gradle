@@ -26,11 +26,11 @@ repositories {
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     // Crypto
     implementation "org.bitcoinj:bitcoinj-core:0.15.1"
-    implementation "com.github.komputing:KEthereum:0.74.9"
+    implementation "com.github.komputing:kethereum:0.74.9"
 
     // Serialization
     implementation "com.fasterxml.jackson.core:jackson-databind:2.0.1"

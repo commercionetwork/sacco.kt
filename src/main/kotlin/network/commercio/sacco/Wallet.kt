@@ -4,8 +4,10 @@ import network.commercio.sacco.crypto.TransactionSigner
 import network.commercio.sacco.crypto.convertBits
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
+import org.kethereum.bip39.generateMnemonic
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.toKey
+import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 import org.kethereum.extensions.toHexStringNoPrefix
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
@@ -49,18 +51,26 @@ data class Wallet internal constructor(
     }
 
     companion object {
+        private const val DERIVATION_PATH = "m/44'/118'/0'/0/0"
 
         /**
-         * Derives the private key from the given [mnemonic] using the specified
-         * [derivationPath] and [networkInfo].
+         * Derives the private key from the given [mnemonic] using the specified [networkInfo].
          */
-        fun derive(mnemonic: List<String>, derivationPath: String, networkInfo: NetworkInfo): Wallet {
-            val keyPair = MnemonicWords(mnemonic).toKey(derivationPath).keyPair
+        fun derive(mnemonic: List<String>, networkInfo: NetworkInfo): Wallet {
+            val keyPair = MnemonicWords(mnemonic).toKey(DERIVATION_PATH).keyPair
             return Wallet(
                 privateKey = keyPair.privateKey,
                 publicKey = keyPair.publicKey,
                 networkInfo = networkInfo
             )
+        }
+
+        /**
+         * Generates a new random wallet for the given [networkInfo].
+         */
+        fun random(networkInfo: NetworkInfo): Wallet {
+            val mnemonic = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
+            return derive(mnemonic, networkInfo)
         }
     }
 }

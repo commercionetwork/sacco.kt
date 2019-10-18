@@ -5,7 +5,6 @@ import org.junit.Test
 
 class WalletTests {
 
-    private val derivationPath = "m/44'/118'/0'/0/0"
     private val networkInfo = NetworkInfo(id = "", bech32Hrp = "cosmos", lcdUrl = "")
     private val testVectors = mapOf(
         "cosmos1huydeevpz37sd9snkgul6070mstupukw00xkw9" to
@@ -34,8 +33,13 @@ class WalletTests {
     fun `Wallets are generated correctly`() {
         testVectors.forEach { (address, mnemonicString) ->
             val mnemonic = mnemonicString.split(" ")
-            val wallet = Wallet.derive(mnemonic, derivationPath, networkInfo)
+            val wallet = Wallet.derive(mnemonic, networkInfo)
             assertEquals(address, wallet.bech32Address)
         }
+    }
+
+    @Test
+    fun `Random wallet is generated properly`() {
+        Wallet.random(networkInfo)
     }
 }

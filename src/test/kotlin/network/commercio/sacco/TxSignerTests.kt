@@ -13,7 +13,6 @@ import org.junit.Test
 
 class TxSignerTests {
 
-    private val derivationPath = "m/44'/118'/0'/0/0"
     private val mnemonic =
         "sibling auction sibling flavor judge foil tube dust work mixed crush action menu property project ride crouch hat mom scale start ill spare panther"
             .split(" ")
@@ -36,7 +35,7 @@ class TxSignerTests {
         val tx = TxBuilder.buildStdTx(stdMsgs = listOf(message), fee = fee)
 
         // Create a wallet
-        val wallet = Wallet.derive(mnemonic, derivationPath, networkInfo)
+        val wallet = Wallet.derive(mnemonic, networkInfo)
 
         mockkObject(LCDService) {
             coEvery { LCDService.getAccountData(any()) } returns AccountData(

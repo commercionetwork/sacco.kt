@@ -7,7 +7,6 @@ import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
 
 fun main() = runBlocking {
-    val derivationPath = "m/44'/118'/0'/0/0"
     val mnemonic =
         "sibling auction sibling flavor judge foil tube dust work mixed crush action menu property project ride crouch hat mom scale start ill spare panther"
             .split(" ")
@@ -20,7 +19,7 @@ fun main() = runBlocking {
     )
 
     // Create a wallet
-    val wallet = Wallet.derive(mnemonic, derivationPath, networkInfo)
+    val wallet = Wallet.derive(mnemonic, networkInfo)
 
     // Build a transaction
     val message = MsgSend(
