@@ -1,7 +1,6 @@
 package network.commercio.sacco.models.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 
 /**
@@ -14,15 +13,4 @@ data class StdTx(
     @JsonProperty("fee") val fee: StdFee,
     @JsonProperty("signatures") val signatures: List<StdSignature>?,
     @JsonProperty("memo") val memo: String
-) {
-
-    override fun toString(): String {
-        return jacksonObjectMapper()
-            .writeValueAsString(
-                mapOf(
-                    "type" to "cosmos-sdk/StdTx",
-                    "value" to this
-                )
-            )
-    }
-}
+)

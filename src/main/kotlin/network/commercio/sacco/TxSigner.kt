@@ -1,10 +1,12 @@
 package network.commercio.sacco
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.encoding.toBase64
 import network.commercio.sacco.models.account.AccountData
+import network.commercio.sacco.models.chain.NodeInfo
 import network.commercio.sacco.models.types.*
 import network.commercio.sacco.utils.LCDService
 
@@ -23,9 +25,12 @@ object TxSigner {
         // Get the account data from the network
         val account = LCDService.getAccountData(wallet)
 
+        // Get the node information
+        val nodeInfo = LCDService.getNodeInfo(wallet)
+
         // Sign each message
         val signatures = stdTx.messages.map { msg ->
-            getStdSignature(wallet, account, msg, stdTx.fee, stdTx.memo)
+            getStdSignature(wallet, account, nodeInfo, msg, stdTx.fee, stdTx.memo)
         }
 
         // Assemble the transaction
@@ -48,6 +53,7 @@ object TxSigner {
     private fun getStdSignature(
         wallet: Wallet,
         account: AccountData,
+        nodeInfo: NodeInfo,
         msg: StdMsg,
         fee: StdFee,
         memo: String
@@ -55,8 +61,8 @@ object TxSigner {
 
         // Create the signature object
         val signature = StdSignatureMessage(
+            chainId = nodeInfo.info.chainId,
             accountNumber = account.accountNumber,
-            chainId = wallet.networkInfo.id,
             memo = memo,
             msgs = listOf(msg),
             sequence = account.sequence,
@@ -67,14 +73,16 @@ object TxSigner {
         val objectMapper = jacksonObjectMapper().apply {
             configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
             configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+            setSerializationInclusion(JsonInclude.Include.ALWAYS)
         }
         val jsonSignData = objectMapper.writeValueAsString(signature)
+        println(jsonSignData)
 
         // Sign the message
-        val signatureData = wallet.signTxData(jsonSignData)
+        val signatureData = wallet.signTxData(jsonSignData.toByteArray(Charsets.UTF_8))
 
         // Get the compressed Base64 public key
-        val pubKeyCompressed = wallet.ecKey.pubKeyPoint.getEncoded(true)
+        val pubKeyCompressed = wallet.pubKeyPoint.getEncoded(true)
 
         // Build the StdSignature
         return StdSignature(

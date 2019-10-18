@@ -11,24 +11,7 @@ dokka {
     reportUndocumented = false
 }
 
-task dokkaJavadoc(type: dokka.getClass()) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-
-    kotlinTasks {
-        defaultKotlinTasks().findAll { it.name.contains("Jvm") }
-    }
-
-//    linkMapping {
-//        dir = "src/main/kotlin"
-//        url = "https://github.com/commercionetwork/sacco.kt/tree/master/src/main/kotlin"
-//        suffix = "#L"
-//    }
-
-    reportUndocumented = false
-}
-
-task javadocJar(type: Jar, dependsOn: 'dokkaJavadoc') {
+task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from fileTree(new File(project.buildDir, 'javadoc'))
 }

@@ -14,7 +14,7 @@ object TxSender {
      * Returns the hash of the transaction once it has been send, or throws
      * and exception if an error is risen during the sending.
      */
-    suspend fun broadcastStdTx(wallet: Wallet, stdTx: StdTx): String {
-        return LCDService.postTx(wallet, stdTx)
+    suspend fun broadcastStdTx(stdTx: StdTx, wallet: Wallet): TxResponse {
+        return LCDService.postTx(stdTx = stdTx, wallet = wallet)
     }
 }

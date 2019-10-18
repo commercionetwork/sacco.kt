@@ -1,5 +1,6 @@
 package network.commercio.sacco
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.models.types.StdMsg
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -20,36 +21,33 @@ class TxBuilderTest {
         )
 
         val txString = """
-            {
-              "type": "cosmos-sdk/StdTx",
-              "value": {
-                "msg": [
-                  {
-                    "type": "cosmos-sdk/MsgSend",
-                    "value": {
-                      "from_address": "cosmos1huydeevpz37sd9snkgul6070mstupukw00xkw9",
-                      "to_address": "cosmos12lla7fg3hjd2zj6uvf4pqj7atx273klc487c5k",
-                      "amount": [
-                        {
-                          "denom": "uatom",
-                          "amount": "100"
-                        }
-                      ]
+        {
+            "msg": [
+              {
+                "type": "cosmos-sdk/MsgSend",
+                "value": {
+                  "from_address": "cosmos1huydeevpz37sd9snkgul6070mstupukw00xkw9",
+                  "to_address": "cosmos12lla7fg3hjd2zj6uvf4pqj7atx273klc487c5k",
+                  "amount": [
+                    {
+                      "denom": "uatom",
+                      "amount": "100"
                     }
-                  }
-                ],
-                "fee": {
-                  "amount": [],
-                  "gas": "200000"
-                },
-                "signatures": null,
-                "memo": ""
+                  ]
+                }
               }
-            }
+            ],
+            "fee": {
+              "amount": [],
+              "gas": "200000"
+            },
+            "signatures": null,
+            "memo": ""
+        }
         """.trimIndent().replace("\\s".toRegex(), "")
 
         val stdTx = TxBuilder.buildStdTx(stdMsgs = listOf(message))
-        assertEquals(txString, stdTx.toString())
+        assertEquals(txString, jacksonObjectMapper().writeValueAsString(stdTx))
     }
 
 }

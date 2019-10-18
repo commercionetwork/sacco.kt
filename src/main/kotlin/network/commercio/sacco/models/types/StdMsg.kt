@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 open class StdMsg(
     @JsonProperty("type") val type: String,
-    @JsonProperty("value") open val value: Map<String, Any>
+    @JsonProperty("value") open val value: Map<String, Any?>
 )

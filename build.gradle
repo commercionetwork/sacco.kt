@@ -12,10 +12,8 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka'
+apply from: rootProject.file('gradle/dokka.gradle')
 apply from: rootProject.file('gradle/publish.gradle')
-
 
 repositories {
     jcenter()
@@ -29,16 +27,18 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     // Crypto
-    implementation "org.bitcoinj:bitcoinj-core:0.15.1"
-    implementation "com.github.komputing:kethereum:0.74.9"
+    compile "org.bitcoinj:bitcoinj-core:0.15.1"
+    compile "com.github.komputing:kethereum:0.74.9"
 
     // Serialization
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.0.1"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.0.1"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
 
     // Networking
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+    compile "com.squareup.okhttp3:logging-interceptor:4.2.1"
+
 
     // --------------------------
     // --- Test dependencies

@@ -1,0 +1,6 @@
+{
+  "height": "0",
+  "txhash": "7611C71BAA5DBE2D7B099B0B7EEDD9CC8E8B2C42F3D654D1FB14EED12765DD19",
+  "code": 6,
+  "raw_log": "{\"codespace\":\"sdk\",\"code\":6,\"message\":\"Field publicKey must have length of 3\"}"
+}

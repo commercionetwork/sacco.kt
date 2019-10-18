@@ -4,6 +4,7 @@ import io.mockk.coEvery
 import io.mockk.mockkObject
 import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.models.account.AccountData
+import network.commercio.sacco.models.chain.NodeInfo
 import network.commercio.sacco.models.messages.MsgSend
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
@@ -20,7 +21,6 @@ class TxSignerTests {
     @Test
     fun `StdTx with fee is signed correctly`() {
         val networkInfo = NetworkInfo(
-            id = "cosmos-hub2",
             bech32Hrp = "cosmos",
             lcdUrl = "http://localhost:1317"
         )
@@ -38,11 +38,8 @@ class TxSignerTests {
         val wallet = Wallet.derive(mnemonic, networkInfo)
 
         mockkObject(LCDService) {
-            coEvery { LCDService.getAccountData(any()) } returns AccountData(
-                accountNumber = "0",
-                sequence = "0",
-                coins = listOf()
-            )
+            coEvery { LCDService.getNodeInfo(any()) } returns NodeInfo(info = NodeInfo.Info(chainId = "cosmos-hub2"))
+            coEvery { LCDService.getAccountData(any()) } returns AccountData("0", "0", listOf())
 
             val signedTx = runBlocking { TxSigner.signStdTx(wallet = wallet, stdTx = tx) }
             assertEquals(1, signedTx.signatures?.size)

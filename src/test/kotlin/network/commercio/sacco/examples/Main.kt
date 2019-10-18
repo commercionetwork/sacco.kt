@@ -13,7 +13,6 @@ fun main() = runBlocking {
 
     // Create a NetworkInfo
     val networkInfo = NetworkInfo(
-        id = "cosmoshub-2",
         bech32Hrp = "cosmos",
         lcdUrl = "http://localhost:1317"
     )

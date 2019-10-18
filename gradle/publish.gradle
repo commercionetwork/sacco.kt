@@ -1,7 +1,7 @@
-apply from: rootProject.file('gradle/dokka.gradle')
+apply plugin: 'maven-publish'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
+    classifier = "sources"
     from sourceSets.main.allSource
 }
 
@@ -12,6 +12,8 @@ publishing {
             artifactId = "sacco.kt"
             artifact sourcesJar
             artifact javadocJar
+            from components.java
+
             pom {
                 name = 'Sacco.kt'
                 description = 'A cryptographic library that allows easy creation, signing and sending of Cosmos Network transactions'

@@ -4,7 +4,7 @@ import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 
-object TransactionSigner {
+internal object TransactionSigner {
 
     /**
      * Signs the given [data] with the given [ecKey], retuning the signature bytes.

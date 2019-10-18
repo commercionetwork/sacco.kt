@@ -5,7 +5,7 @@ import org.junit.Test
 
 class WalletTests {
 
-    private val networkInfo = NetworkInfo(id = "", bech32Hrp = "cosmos", lcdUrl = "")
+    private val networkInfo = NetworkInfo(bech32Hrp = "cosmos", lcdUrl = "")
     private val testVectors = mapOf(
         "cosmos1huydeevpz37sd9snkgul6070mstupukw00xkw9" to
                 "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid",
@@ -36,6 +36,13 @@ class WalletTests {
             val wallet = Wallet.derive(mnemonic, networkInfo)
             assertEquals(address, wallet.bech32Address)
         }
+    }
+
+    @Test
+    fun `PubKeyAsHex returns valid length hex`() {
+        val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
+        val wallet = Wallet.derive(mnemonic, networkInfo)
+        assertEquals(176, wallet.pubKeyAsHex.length)
     }
 
     @Test

@@ -1,7 +1,7 @@
 ![](.img/logo.jpg)
 
-![JitPack](https://img.shields.io/jitpack/v/github/commercionetwork/sacco.kt)
-![Travis (.org)](https://img.shields.io/travis/commercionetwork/sacco.kt)
+[![Release](https://jitpack.io/v/commercionetwork/sacco.kt.svg)](https://jitpack.io/#commercionetwork/sacco.kt)
+[![Travis (.org)](https://img.shields.io/travis/commercionetwork/sacco.kt)](https://travis-ci.org/commercionetwork/sacco.kt)
 ![](https://img.shields.io/badge/compatible-Kotlin-blue)
 ![](https://img.shields.io/badge/compatible-JVM-blue)
 
@@ -19,7 +19,7 @@ Being it in Kotlin-JVM means that you can use it inside your Android application
 ### Creating a wallet
 ```kotlin
 val derivationPath = "m/44'/118'/0'/0/0"
-val networkInfo = NetworkInfo(id = "", bech32Hrp = "cosmos", lcdUrl = "")
+val networkInfo = NetworkInfo(bech32Hrp = "cosmos", lcdUrl = "")
 
 val mnemonicString = "sibling auction sibling flavor judge foil tube dust work mixed crush action menu property project ride crouch hat mom scale start ill spare panther"
 val mnemonic = mnemonicString.split(" ")
