@@ -1,7 +1,7 @@
 ![](.img/logo.jpg)
 
 [![Release](https://jitpack.io/v/commercionetwork/sacco.kt.svg)](https://jitpack.io/#commercionetwork/sacco.kt)
-[![Travis (.org)](https://img.shields.io/travis/commercionetwork/sacco.kt)](https://travis-ci.org/commercionetwork/sacco.kt)
+[![Travis](https://img.shields.io/travis/com/commercionetwork/sacco.kt)](https://travis-ci.org/commercionetwork/sacco.kt)
 ![](https://img.shields.io/badge/compatible-Kotlin-blue)
 ![](https://img.shields.io/badge/compatible-JVM-blue)
 

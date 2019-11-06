@@ -1,8 +1,8 @@
 package network.commercio.sacco
 
+import org.bouncycastle.util.encoders.Hex
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.walleth.khex.toHexString
 
 class WalletTests {
 
@@ -50,7 +50,7 @@ class WalletTests {
     fun `ecPublicKey returns valid length key`() {
         val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
         val wallet = Wallet.derive(mnemonic, networkInfo)
-        assertEquals(178, wallet.ecPublicKey.encoded.toHexString().length)
+        assertEquals(176, Hex.toHexString(wallet.ecPublicKey.encoded).length)
     }
 
     @Test
