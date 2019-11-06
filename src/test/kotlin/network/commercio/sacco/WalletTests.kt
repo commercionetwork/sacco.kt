@@ -2,6 +2,7 @@ package network.commercio.sacco
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.walleth.khex.toHexString
 
 class WalletTests {
 
@@ -42,7 +43,14 @@ class WalletTests {
     fun `PubKeyAsHex returns valid length hex`() {
         val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
         val wallet = Wallet.derive(mnemonic, networkInfo)
-        assertEquals(176, wallet.pubKeyAsHex.length)
+        assertEquals(66, wallet.pubKeyAsHex.length)
+    }
+
+    @Test
+    fun `ecPublicKey returns valid length key`() {
+        val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
+        val wallet = Wallet.derive(mnemonic, networkInfo)
+        assertEquals(178, wallet.ecPublicKey.encoded.toHexString().length)
     }
 
     @Test
