@@ -19,7 +19,6 @@ import org.kethereum.model.PublicKey
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.MessageDigest
-import java.security.Security
 import java.security.Signature
 import java.security.spec.ECPublicKeySpec
 
@@ -55,17 +54,15 @@ data class Wallet internal constructor(
      * Gets the private key in the form of a [java.security.PrivateKey] object.
      */
     private val ecPrivateKey: java.security.PrivateKey by lazy {
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
         val ecParamSpec = ECNamedCurveTable.getParameterSpec("secp256k1")
         val privateKeySpec = ECPrivateKeySpec(privateEcKey.privKey, ecParamSpec)
-        KeyFactory.getInstance("EC", "BC").generatePrivate(privateKeySpec)
+        KeyFactory.getInstance("EC", BouncyCastleProvider()).generatePrivate(privateKeySpec)
     }
 
     /**
      * Gets the public key in the form of a [java.security.PublicKey] object.
      */
     val ecPublicKey: java.security.PublicKey by lazy {
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
         val point = java.security.spec.ECPoint(pubKeyPoint.xCoord.toBigInteger(), pubKeyPoint.yCoord.toBigInteger())
         val parameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1")
         val spec = ECNamedCurveSpec(
@@ -76,7 +73,7 @@ data class Wallet internal constructor(
             parameterSpec.h,
             parameterSpec.seed
         )
-        KeyFactory.getInstance("EC", "BC").generatePublic(ECPublicKeySpec(point, spec))
+        KeyFactory.getInstance("EC", BouncyCastleProvider()).generatePublic(ECPublicKeySpec(point, spec))
     }
 
     /**
@@ -107,7 +104,7 @@ data class Wallet internal constructor(
      * The resulting byte array represents the signature in DER format.
      */
     fun sign(data: ByteArray): ByteArray {
-        return Signature.getInstance("SHA256WithECDSA", "BC").apply {
+        return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
             initSign(ecPrivateKey)
             update(data)
         }.sign()
