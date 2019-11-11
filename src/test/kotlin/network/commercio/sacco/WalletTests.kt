@@ -2,6 +2,7 @@ package network.commercio.sacco
 
 import org.bouncycastle.util.encoders.Hex
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
 class WalletTests {
@@ -56,5 +57,42 @@ class WalletTests {
     @Test
     fun `Random wallet is generated properly`() {
         Wallet.random(networkInfo)
+    }
+
+    @Test
+    fun `Sign data returns non deterministic signatures`() {
+        val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
+        val mnemonic = listOf(
+                "will",
+                "hard",
+                "topic",
+                "spray",
+                "beyond",
+                "ostrich",
+                "moral",
+                "morning",
+                "gas",
+                "loyal",
+                "couch",
+                "horn",
+                "boss",
+                "across",
+                "age",
+                "post",
+                "october",
+                "blur",
+                "piece",
+                "wheel",
+                "film",
+                "notable",
+                "word",
+                "man"
+        )
+        val wallet = Wallet.derive(mnemonic, info)
+
+        val data = "Test";
+        val sig1 = Hex.toHexString(wallet.sign(data.toByteArray()))
+        val sig2 = Hex.toHexString(wallet.sign(data.toByteArray()))
+        assertNotEquals(sig1, sig2)
     }
 }

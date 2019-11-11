@@ -101,7 +101,7 @@ data class Wallet internal constructor(
 
     /**
      * Signs the given [data] using the SHA256WitECDSA algorithm.
-     * The resulting byte array represents the signature in DER format.
+     * The resulting byte array represents the signature in ASN.1 DER format.
      */
     fun sign(data: ByteArray): ByteArray {
         return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
