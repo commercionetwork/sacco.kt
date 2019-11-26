@@ -28,17 +28,16 @@ object TxSigner {
         // Get the node information
         val nodeInfo = LCDService.getNodeInfo(wallet)
 
-        // Sign each message
-        val signatures = stdTx.messages.map { msg ->
-            getStdSignature(wallet, account, nodeInfo, msg, stdTx.fee, stdTx.memo)
-        }
+        // Sign all messages
+        val signatures = getStdSignature(wallet, account, nodeInfo, stdTx.messages, stdTx.fee, stdTx.memo)
+
 
         // Assemble the transaction
-        return stdTx.copy(signatures = signatures)
+        return stdTx.copy(signatures = listOf(signatures))
     }
 
     /**
-     * Creates an [StdSignature] object containing the signature value of the given [msg].
+     * Creates an [StdSignature] object containing the signature value of the given [msgs].
      * When creating the signature, the given [fee] and [memo] are inserted inside the signature, and the whole
      * JSON object is signed using the provided [wallet].
      *
@@ -54,7 +53,7 @@ object TxSigner {
         wallet: Wallet,
         account: AccountData,
         nodeInfo: NodeInfo,
-        msg: StdMsg,
+        msgs: List<StdMsg>,
         fee: StdFee,
         memo: String
     ): StdSignature {
@@ -64,7 +63,7 @@ object TxSigner {
             chainId = nodeInfo.info.chainId,
             accountNumber = account.accountNumber,
             memo = memo,
-            msgs = listOf(msg),
+            msgs = msgs,
             sequence = account.sequence,
             fee = fee
         )
