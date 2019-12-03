@@ -33,6 +33,6 @@ fun main() = runBlocking {
     val signedTx = TxSigner.signStdTx(wallet = wallet, stdTx = tx)
 
     // Send the transaction
-    val txHash = TxSender.broadcastStdTx(wallet = wallet, stdTx = signedTx)
+    val txHash = TxSender.broadcastStdTx(wallet = wallet, stdTx = signedTx, mode = "sync")
     println("Tx sent successfully. Hash: $txHash")
 }

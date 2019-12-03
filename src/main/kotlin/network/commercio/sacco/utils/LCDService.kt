@@ -104,9 +104,9 @@ internal object LCDService {
      * @return the hash of the transaction when sent successfully
      * @throws Exception if something goes wrong while sending the transaction
      */
-    suspend fun postTx(stdTx: StdTx, wallet: Wallet): TxResponse {
+    suspend fun postTx(stdTx: StdTx, wallet: Wallet, mode: String): TxResponse {
         // Build the request body
-        val requestBody = mapOf("tx" to stdTx, "mode" to "sync")
+        val requestBody = mapOf("tx" to stdTx, "mode" to mode)
 
         // Send the tx
         val url = "${wallet.networkInfo.lcdUrl}/txs"
