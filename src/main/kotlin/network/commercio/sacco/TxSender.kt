@@ -10,7 +10,7 @@ import network.commercio.sacco.utils.LCDService
 object TxSender {
 
     /**
-     * Broadcasts the given [stdTx] using the info contained inside the given [wallet].
+     * Broadcasts the given [stdTx] using the info contained inside the given [wallet] using the proper [mode] given.
      * Returns the hash of the transaction once it has been send, or throws
      * and exception if an error is risen during the sending.
      */
