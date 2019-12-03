@@ -62,7 +62,7 @@ class LCDServiceTests {
         }
         LCDService.chainService = mockService
 
-        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet) }
+        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet, mode = "sync") }
         assertTrue(result is TxResponse.Error)
 
         result as TxResponse.Error
@@ -82,7 +82,7 @@ class LCDServiceTests {
         }
         LCDService.chainService = mockService
 
-        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet) }
+        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet, mode = "sync") }
         assertTrue(result is TxResponse.Error)
 
         result as TxResponse.Error
@@ -102,7 +102,7 @@ class LCDServiceTests {
         }
         LCDService.chainService = mockService
 
-        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet) }
+        val result = runBlocking { LCDService.postTx(stdTx = stdTx, wallet = wallet, mode = "sync") }
         assertTrue(result is TxResponse.Successful)
 
         result as TxResponse.Successful
