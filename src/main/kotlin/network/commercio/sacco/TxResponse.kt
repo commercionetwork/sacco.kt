@@ -10,7 +10,7 @@ sealed class TxResponse {
      * @property txHash represents the hash of the inserted transaction.
      * @property code represents the error related if the transaction goes wrong after broadcasting.
      */
-    data class Successful(val txHash: String, val code: Int?) : TxResponse()
+    data class Successful(val txHash: String, val code: Any?) : TxResponse()
 
     /**
      * Represents an errored transaction before broadcasting it.
