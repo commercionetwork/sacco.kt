@@ -8,11 +8,12 @@ sealed class TxResponse {
     /**
      * Represents a successful transaction.
      * @property txHash represents the hash of the inserted transaction.
+     * @property code represents the error related if the transaction goes wrong after broadcasting.
      */
-    data class Successful(val txHash: String) : TxResponse()
+    data class Successful(val txHash: String, val code: Int?) : TxResponse()
 
     /**
-     * Represents an errored transaction.
+     * Represents an errored transaction before broadcasting it.
      * @property code code of the error
      * @property message error message
      */

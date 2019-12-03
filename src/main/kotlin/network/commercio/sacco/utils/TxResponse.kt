@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 internal data class TxResponseJson(
     @JsonProperty("txhash") val hash: String,
+    @JsonProperty("code") val code: Int?,
     @JsonProperty("logs") val logs: List<MsgLog>?,
     @JsonProperty("raw_log") val rawLog: String
 )

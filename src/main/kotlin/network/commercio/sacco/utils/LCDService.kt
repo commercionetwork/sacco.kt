@@ -129,7 +129,7 @@ internal object LCDService {
 
         return when {
             logs == null -> checkRawLog(tx.rawLog)
-            logs.all { it.success } -> TxResponse.Successful(txHash = tx.hash)
+            logs.all { it.success } -> TxResponse.Successful(txHash = tx.hash, code = tx.code)
             else -> {
                 val failedLog = tx.logs.first { !it.success }
                 val result = objectMapper.readValue(failedLog.log, MsgResultLog::class.java)
