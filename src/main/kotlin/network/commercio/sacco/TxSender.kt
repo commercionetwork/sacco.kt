@@ -10,11 +10,12 @@ import network.commercio.sacco.utils.LCDService
 object TxSender {
 
     /**
-     * Broadcasts the given [stdTx] using the info contained inside the given [wallet] using the proper [mode] given.
+     * Broadcasts the given [stdTx] using the info contained inside the given [wallet] using the proper [mode] given
+     * or the default one if none is passed.
      * Returns the hash of the transaction once it has been send, or throws
      * and exception if an error is risen during the sending.
      */
-    suspend fun broadcastStdTx(stdTx: StdTx, wallet: Wallet, mode: String): TxResponse {
+    suspend fun broadcastStdTx(stdTx: StdTx, wallet: Wallet, mode: String = "block"): TxResponse {
         return LCDService.postTx(stdTx = stdTx, wallet = wallet, mode = mode)
     }
 }
