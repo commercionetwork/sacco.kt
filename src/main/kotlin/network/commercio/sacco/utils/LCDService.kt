@@ -126,10 +126,9 @@ internal object LCDService {
      */
     private fun checkLogs(tx: TxResponseJson): TxResponse {
         return when {
-            tx.code!=null -> {
+            tx.code != null -> {
 
                 val logs = tx.logs
-
                 return when {
                     logs == null -> checkRawLog(tx.rawLog, tx.code)
                     else -> {
@@ -138,34 +137,20 @@ internal object LCDService {
                         TxResponse.Error(code = result.code, message = result.message)
                     }
                 }
-
             }
             else -> TxResponse.Successful(txHash = tx.hash)
         }
-        /*
-        val logs = tx.logs
-
-        return when {
-            logs == null -> checkRawLog(tx.rawLog)
-            logs.all { it.success } -> TxResponse.Successful(txHash = tx.hash)
-            else -> {
-                val failedLog = tx.logs.first { !it.success }
-                val result = objectMapper.readValue(failedLog.log, MsgResultLog::class.java)
-                TxResponse.Error(code = result.code, message = result.message)
-            }
-        }
-         */
     }
 
     /**
      * Checks the raw log contained inside the response that is returned from the server
      * upon posting a transaction that has failed.
      */
-    private fun checkRawLog(rawLog: String, code:Int): TxResponse.Error {
-        if(rawLog.startsWith('{') && rawLog.contains("message")) {
+    private fun checkRawLog(rawLog: String, code: Int): TxResponse.Error {
+        if (rawLog.startsWith('{') && rawLog.contains("message")) {
             val result = objectMapper.readValue(rawLog, MsgResultLog::class.java)
             return TxResponse.Error(code = result.code, message = result.message)
-        }else{
+        } else {
             return TxResponse.Error(code = code, message = rawLog)
         }
     }
