@@ -42,14 +42,20 @@ class WalletTests {
 
     @Test
     fun `PubKeyAsHex returns valid length hex`() {
-        val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
+        val mnemonic =
+            "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(
+                " "
+            )
         val wallet = Wallet.derive(mnemonic, networkInfo)
         assertEquals(66, wallet.pubKeyAsHex.length)
     }
 
     @Test
     fun `ecPublicKey returns valid length key`() {
-        val mnemonic = "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(" ")
+        val mnemonic =
+            "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(
+                " "
+            )
         val wallet = Wallet.derive(mnemonic, networkInfo)
         assertEquals(176, Hex.toHexString(wallet.ecPublicKey.encoded).length)
     }
@@ -63,36 +69,59 @@ class WalletTests {
     fun `Sign data returns non deterministic signatures`() {
         val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
         val mnemonic = listOf(
-                "will",
-                "hard",
-                "topic",
-                "spray",
-                "beyond",
-                "ostrich",
-                "moral",
-                "morning",
-                "gas",
-                "loyal",
-                "couch",
-                "horn",
-                "boss",
-                "across",
-                "age",
-                "post",
-                "october",
-                "blur",
-                "piece",
-                "wheel",
-                "film",
-                "notable",
-                "word",
-                "man"
+            "will",
+            "hard",
+            "topic",
+            "spray",
+            "beyond",
+            "ostrich",
+            "moral",
+            "morning",
+            "gas",
+            "loyal",
+            "couch",
+            "horn",
+            "boss",
+            "across",
+            "age",
+            "post",
+            "october",
+            "blur",
+            "piece",
+            "wheel",
+            "film",
+            "notable",
+            "word",
+            "man"
         )
         val wallet = Wallet.derive(mnemonic, info)
 
-        val data = "Test";
+        val data = "Test"
         val sig1 = Hex.toHexString(wallet.sign(data.toByteArray()))
         val sig2 = Hex.toHexString(wallet.sign(data.toByteArray()))
         assertNotEquals(sig1, sig2)
+    }
+
+    @Test
+    fun `Wallets derivation are generated correctly`() {
+        val mnemonic =
+            "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(
+                " "
+            )
+        val walletDerivationStandard = Wallet.derive(mnemonic, networkInfo, 0)
+        val wallet = Wallet.derive(mnemonic, networkInfo)
+        val walletDerivationNotStandard = Wallet.derive(mnemonic, networkInfo, 1)
+
+        assertEquals(wallet.bech32Address, walletDerivationStandard.bech32Address)
+        assertNotEquals(wallet.bech32Address, walletDerivationNotStandard.bech32Address)
+    }
+
+    @Test(expected = Exception::class)
+    fun `Wallets derivation generated with negative number launch Exception`() {
+        val mnemonic =
+            "final random flame cinnamon grunt hazard easily mutual resist pond solution define knife female tongue crime atom jaguar alert library best forum lesson rigid".split(
+                " "
+            )
+        Wallet.derive(mnemonic, networkInfo, -1)
     }
 }
