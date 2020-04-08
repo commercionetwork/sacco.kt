@@ -20,6 +20,9 @@ fun main() = runBlocking {
     // Create a wallet
     val wallet = Wallet.derive(mnemonic, networkInfo)
 
+    // Generate many addresses with single mnemonic
+    val wallet1 = Wallet.derive(mnemonic = mnemonic, networkInfo = networkInfo, lastDerivationPathSegment = 1)
+
     // Build a transaction
     val message = MsgSend(
         fromAddress = "cosmos1hafptm4zxy5nw8rd2pxyg83c5ls2v62tstzuv2",
