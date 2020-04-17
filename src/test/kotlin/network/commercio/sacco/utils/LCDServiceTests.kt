@@ -7,11 +7,13 @@ import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
+import network.commercio.sacco.models.account.AccountData
 import network.commercio.sacco.models.types.StdTx
 import network.commercio.sacco.readResource
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
+import org.kethereum.bip39.generateMnemonic
+import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 import retrofit2.Response
 
 /**
@@ -108,4 +110,55 @@ class LCDServiceTests {
         result as TxResponse.Successful
         assertEquals("2CB2471712192815191A679268E4993C67CAD1654FED8F398B698F57EF4A23C1", result.txHash)
     }
+
+    @Test
+    fun `getAccountData returns the proper result with accountNumber and sequence as Int`() = mockkObject(LCDService) {
+
+        val mockService = mockk<ChainService> {
+            coEvery { getAccountData(any()) } returns Response.success(
+                mapOf(
+                    "result" to mapOf(
+                        "value" to mapOf(
+                            "account_number" to 47,
+                            "sequence" to 5,
+                            "coins" to listOf(
+                                mapOf("denom" to "ucommercio", "amount" to "100")
+                            )
+                        )
+                    )
+                )
+            )
+        }
+        LCDService.chainService = mockService
+
+        val accountData = runBlocking { LCDService.getAccountData(wallet) }
+        assertEquals(accountData.accountNumber, 47)
+        assertEquals(accountData.sequence, 5)
+    }
+
+    @Test
+    fun `getAccountData returns the proper result with accountNumber and sequence as String`() =
+        mockkObject(LCDService) {
+
+            val mockService = mockk<ChainService> {
+                coEvery { getAccountData(any()) } returns Response.success(
+                    mapOf(
+                        "result" to mapOf(
+                            "value" to mapOf(
+                                "account_number" to "47",
+                                "sequence" to "5",
+                                "coins" to listOf(
+                                    mapOf("denom" to "ucommercio", "amount" to "100")
+                                )
+                            )
+                        )
+                    )
+                )
+            }
+            LCDService.chainService = mockService
+
+            val accountData = runBlocking { LCDService.getAccountData(wallet) }
+            assertEquals(accountData.accountNumber, "47")
+            assertEquals(accountData.sequence, "5")
+        }
 }

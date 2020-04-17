@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * https://cosmos.network/docs/spec/auth/03_types.html#stdsigndoc
  */
 data class StdSignatureMessage(
-    @JsonProperty("account_number") val accountNumber: String,
+    @JsonProperty("account_number") val accountNumber: Any,
     @JsonProperty("chain_id") val chainId: String,
     @JsonProperty("fee") val fee: StdFee,
     @JsonProperty("memo") val memo: String?,
     @JsonProperty("msgs") val msgs: List<StdMsg>,
-    @JsonProperty("sequence") val sequence: String
+    @JsonProperty("sequence") val sequence: Any
 )

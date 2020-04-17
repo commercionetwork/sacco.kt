@@ -8,7 +8,7 @@ import network.commercio.sacco.models.types.StdCoin
  * a single account and its current state.
  */
 internal data class AccountData(
-    @JsonProperty("account_number") val accountNumber: String,
-    @JsonProperty("sequence") val sequence: String,
+    @JsonProperty("account_number") val accountNumber: Any,
+    @JsonProperty("sequence") val sequence: Any,
     @JsonProperty("coins") val coins: List<StdCoin>
 )

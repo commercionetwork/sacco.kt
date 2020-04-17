@@ -125,16 +125,20 @@ internal object LCDService {
      * and converts the response to the appropriate [TxResponse] instance.
      */
     private fun checkLogs(tx: TxResponseJson): TxResponse {
-        val logs = tx.logs
-
         return when {
-            logs == null -> checkRawLog(tx.rawLog)
-            logs.all { it.success } -> TxResponse.Successful(txHash = tx.hash)
-            else -> {
-                val failedLog = tx.logs.first { !it.success }
-                val result = objectMapper.readValue(failedLog.log, MsgResultLog::class.java)
-                TxResponse.Error(code = result.code, message = result.message)
+            tx.code != null -> {
+
+                val logs = tx.logs
+                return when {
+                    logs == null -> checkRawLog(tx.rawLog, tx.code)
+                    else -> {
+                        val failedLog = tx.logs.first { !it.success }
+                        val result = objectMapper.readValue(failedLog.log, MsgResultLog::class.java)
+                        TxResponse.Error(code = result.code, message = result.message)
+                    }
+                }
             }
+            else -> TxResponse.Successful(txHash = tx.hash)
         }
     }
 
@@ -142,8 +146,12 @@ internal object LCDService {
      * Checks the raw log contained inside the response that is returned from the server
      * upon posting a transaction that has failed.
      */
-    private fun checkRawLog(rawLog: String): TxResponse.Error {
-        val result = objectMapper.readValue(rawLog, MsgResultLog::class.java)
-        return TxResponse.Error(code = result.code, message = result.message)
+    private fun checkRawLog(rawLog: String, code: Int): TxResponse.Error {
+        if (rawLog.startsWith('{') && rawLog.contains("message")) {
+            val result = objectMapper.readValue(rawLog, MsgResultLog::class.java)
+            return TxResponse.Error(code = result.code, message = result.message)
+        } else {
+            return TxResponse.Error(code = code, message = rawLog)
+        }
     }
 }

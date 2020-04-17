@@ -111,13 +111,20 @@ data class Wallet internal constructor(
     }
 
     companion object {
-        private const val DERIVATION_PATH = "m/44'/118'/0'/0/0"
+        private const val BASE_DERIVATION_PATH = "m/44'/118'/0'/0"
 
         /**
          * Derives the private key from the given [mnemonic] using the specified [networkInfo].
+         * Optionally can define a different derivation path setting [lastDerivationPathSegment].
          */
-        fun derive(mnemonic: List<String>, networkInfo: NetworkInfo): Wallet {
-            val keyPair = MnemonicWords(mnemonic).toKey(DERIVATION_PATH).keyPair
+        fun derive(
+            mnemonic: List<String>, networkInfo: NetworkInfo, lastDerivationPathSegment: Int = 0
+        ): Wallet {
+
+            if (lastDerivationPathSegment < 0)
+                throw Exception("Invalid index format:  $lastDerivationPathSegment, Number must be positive")
+
+            val keyPair = MnemonicWords(mnemonic).toKey("$BASE_DERIVATION_PATH/$lastDerivationPathSegment").keyPair
             return Wallet(
                 privateKey = keyPair.privateKey,
                 publicKey = keyPair.publicKey,
