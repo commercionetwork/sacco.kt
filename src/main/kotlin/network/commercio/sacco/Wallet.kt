@@ -42,6 +42,18 @@ data class Wallet internal constructor(
         }
 
     /**
+     *  Returns the associated [publicKey] as a Bech32 string
+     */
+    val bech32PublicKey: String
+        get() {
+            val type = byteArrayOf(235.toByte(), 90, 233.toByte(), 135.toByte(), 33)
+            val prefix = networkInfo.bech32Hrp + "pub"
+            val pubKeyCompressed = pubKeyPoint.getEncoded(true)
+            val fullPublicKey = (type + pubKeyCompressed).convertBits()
+            return Bech32.encode(prefix, fullPublicKey)
+        }
+
+    /**
      * Gets the private key in the form of an [ECKey] object.
      */
     private val privateEcKey: ECKey

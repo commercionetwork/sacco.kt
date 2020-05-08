@@ -20,6 +20,9 @@ fun main() = runBlocking {
     // Create a wallet
     val wallet = Wallet.derive(mnemonic, networkInfo)
 
+    // Get the associated publicKey as a Bech32 string
+    val bech32PublicKey = wallet.bech32PublicKey
+
     // Generate many addresses with single mnemonic
     val wallet1 = Wallet.derive(mnemonic = mnemonic, networkInfo = networkInfo, lastDerivationPathSegment = 1)
 
