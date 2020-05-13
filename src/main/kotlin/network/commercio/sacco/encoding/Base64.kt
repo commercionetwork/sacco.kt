@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream
 /**
  * Converts [this] [ByteArray] value into its Base64 string representation.
  */
-internal fun ByteArray.toBase64(): String {
+fun ByteArray.toBase64(): String {
     val table = (CharRange('A', 'Z') + CharRange('a', 'z') + CharRange('0', '9') + '+' + '/').toCharArray()
     val output = ByteArrayOutputStream()
     var padding = 0
