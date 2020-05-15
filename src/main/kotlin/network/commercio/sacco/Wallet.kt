@@ -10,6 +10,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECNamedCurveSpec
 import org.bouncycastle.jce.spec.ECPrivateKeySpec
 import org.bouncycastle.math.ec.ECPoint
+import org.bouncycastle.util.encoders.Base64
 import org.bouncycastle.util.encoders.Hex
 import org.kethereum.bip39.generateMnemonic
 import org.kethereum.bip39.model.MnemonicWords
@@ -28,6 +29,7 @@ import java.security.MessageDigest
 import java.security.SecureRandom
 import java.security.Signature
 import java.security.spec.ECPublicKeySpec
+import java.util.Base64.getEncoder
 
 
 /**
@@ -122,28 +124,37 @@ data class Wallet internal constructor(
 
     fun sign(data: ByteArray): ByteArray {
 
+//        ORIGINALE SACCO.KT --- togliendo BouncyCastleProvider () diventa deterministica
+        return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
+            initSign(ecPrivateKey)
+            update(data)
+        }.sign()
+
+
         //TENTATIVO N.1
+        // size 64 e aspetto coerente con quella creata in dart.
+        // Non funziona: unauthorized: proof signature verification failed
 
-        val eCDSASignature: ECDSASignature = ECKeyPair(privateKey.key, publicKey.key).sign(data)
-        val R = eCDSASignature.r
-        val S = eCDSASignature.s
-        val union = (R.toByteArray() + S.toByteArray())
-
-
-        print("\nMetodo sign del Wallet di sacco:\neCDSASignature:  \n ${eCDSASignature.r} \n  ${eCDSASignature.s}")
-        print("\nR.toByteArray(): ")
-        R.toByteArray().forEach { print("$it, ") }
-        print("\nS.toByteArray(): ")
-        S.toByteArray().forEach { print("$it, ") }
-        print("\nunion: ")
-        union.forEach { print("$it, ") }
-
-        return union
-
-
+//        val eCDSASignature: ECDSASignature = ECKeyPair(privateKey.key, publicKey.key).sign(data)
+//        val R = eCDSASignature.r
+//        val S = eCDSASignature.s
+//        val union = (R.toByteArray() + S.toByteArray())
+//
+//
+//        print("\nMetodo sign del Wallet di sacco:\neCDSASignature:  \n ${eCDSASignature.r} \n  ${eCDSASignature.s}")
+//        print("\nR.toByteArray(): ")
+//        R.toByteArray().forEach { print("$it, ") }
+//        print("\nS.toByteArray(): ")
+//        S.toByteArray().forEach { print("$it, ") }
+//        print("\nunion: ")
+//        union.forEach { print("$it, ") }
+//
+//        return union
 
 
         //TENTATIVO N.2
+        // size 64 e aspetto coerente con quella creata in dart.
+        // Non funziona: unauthorized: proof signature verification failed
 
 //        val privKey =privateKey.key
 //        val pubKey = Sign.publicKeyFromPrivate(privKey)
@@ -172,10 +183,49 @@ data class Wallet internal constructor(
 //        return (signature.r+signature.s)
 
 
+        //TENTATIVO N.2
+        // size 64 e aspetto coerente con quella creata in dart.
+        // Non funziona: unauthorized: proof signature verification failed
+
+//        val privKey =privateKey.key
+//        val pubKey = Sign.publicKeyFromPrivate(privKey)
+//        val keyPair = ECKeyPair(privKey, pubKey)
+//        println("Private key: " + privKey.toString(16))
+//        println("Public key: " + pubKey.toString(16))
+//        //System.out.println("Public key (compressed): " + compressPubKey(pubKey))
+//
+//
+//        val msgHash = Hash.sha3(data)
+//        val signature = Sign.signMessage(msgHash, keyPair, false)
+//
+//        System.out.println("Msg hash: " + Hex.toHexString(msgHash))
+//        System.out.printf(
+//            "Signature: [ r = %s, s = %s]\n",
+//            Hex.toHexString(signature.r),
+//            Hex.toHexString(signature.s)
+//        )
+//
+////        val pubKeyRecovered = Sign.signedMessageToKey(data, signature)
+////        println("Recovered public key: " + pubKeyRecovered.toString(16))
+////
+////        val validSig = pubKey == pubKeyRecovered
+////        println("Signature valid? $validSig")
+//
+//        return (signature.r+signature.s)
 
 
 
+        //TENTATIVO N.3
+        // size variabile
 
+//        val signature = Signature.getInstance("SHA256withECDSA");
+//        val secureRandom = SecureRandom()
+//
+//        signature.initSign(ecPrivateKey, secureRandom);
+//        signature.update(data);
+//
+//        val digitalSignature = signature.sign();
+//        return digitalSignature
 
     }
 
