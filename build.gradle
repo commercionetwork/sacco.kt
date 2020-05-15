@@ -19,6 +19,8 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/web3j/maven/org/web3j/crypto' }
+
 }
 
 dependencies {
@@ -29,6 +31,7 @@ dependencies {
     // Crypto
     compile "org.bitcoinj:bitcoinj-core:0.15.1"
     compile "com.github.komputing:kethereum:0.74.9"
+    compile "org.web3j:crypto:4.5.17"
 
     // Serialization
     compile "com.fasterxml.jackson.core:jackson-databind:2.0.1"

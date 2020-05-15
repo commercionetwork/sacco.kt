@@ -2,6 +2,7 @@ package network.commercio.sacco
 
 import network.commercio.sacco.crypto.TransactionSigner
 import network.commercio.sacco.crypto.convertBits
+import network.commercio.sacco.encoding.toBase64
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
 import org.bouncycastle.jce.ECNamedCurveTable
@@ -9,18 +10,22 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECNamedCurveSpec
 import org.bouncycastle.jce.spec.ECPrivateKeySpec
 import org.bouncycastle.math.ec.ECPoint
+import org.bouncycastle.util.encoders.Hex
 import org.kethereum.bip39.generateMnemonic
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.toKey
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
-import org.kethereum.crypto.toECKeyPair
-import org.kethereum.extensions.toHexString
 import org.kethereum.extensions.toHexStringNoPrefix
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import org.web3j.crypto.ECDSASignature
+import org.web3j.crypto.ECKeyPair
+import org.web3j.crypto.Hash
+import org.web3j.crypto.Sign
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.MessageDigest
+import java.security.SecureRandom
 import java.security.Signature
 import java.security.spec.ECPublicKeySpec
 
@@ -61,12 +66,7 @@ data class Wallet internal constructor(
      */
     private val privateEcKey: ECKey
         get() {
-           //corrisponde a print("\nprivateKeyHex: ${HEX.encode(privateKey)}");
-            print("\n\nprivateKey.keytoHexStringNoPrefix: ${privateKey.key.toHexStringNoPrefix()}")
-           val privateKeyHex = privateKey.key.toHexStringNoPrefix()
-            print("\nprivateKeyInt: ${BigInteger(privateKeyHex, 16)}")
-            print("\nresult from privateEcKey: ${ECKey.fromPrivate(BigInteger(privateKeyHex, 16))
-            }")
+            val privateKeyHex = privateKey.key.toHexStringNoPrefix()
             return ECKey.fromPrivate(BigInteger(privateKeyHex, 16))
         }
 
@@ -119,19 +119,65 @@ data class Wallet internal constructor(
         return TransactionSigner.deriveFrom(hash, privateEcKey)
     }
 
-    /**
-     * Signs the given [data] using the SHA256WitECDSA algorithm.
-     * The resulting byte array represents the signature in ASN.1 DER format.
-     */
-    fun sign(data: ByteArray): ByteArray {
-        return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
-            val a =initSign(ecPrivateKey)
-            print("\ninitSign(ecPrivateKey): ${a.toString()}")
-            val b= update(data)
-            print("\nupdate(data): ${b.toString()}")
-        }.sign()
-    }
 
+    fun sign(data: ByteArray): ByteArray {
+
+        //TENTATIVO N.1
+
+        val eCDSASignature: ECDSASignature = ECKeyPair(privateKey.key, publicKey.key).sign(data)
+        val R = eCDSASignature.r
+        val S = eCDSASignature.s
+        val union = (R.toByteArray() + S.toByteArray())
+
+
+        print("\nMetodo sign del Wallet di sacco:\neCDSASignature:  \n ${eCDSASignature.r} \n  ${eCDSASignature.s}")
+        print("\nR.toByteArray(): ")
+        R.toByteArray().forEach { print("$it, ") }
+        print("\nS.toByteArray(): ")
+        S.toByteArray().forEach { print("$it, ") }
+        print("\nunion: ")
+        union.forEach { print("$it, ") }
+
+        return union
+
+
+
+
+        //TENTATIVO N.2
+
+//        val privKey =privateKey.key
+//        val pubKey = Sign.publicKeyFromPrivate(privKey)
+//        val keyPair = ECKeyPair(privKey, pubKey)
+//        println("Private key: " + privKey.toString(16))
+//        println("Public key: " + pubKey.toString(16))
+//        //System.out.println("Public key (compressed): " + compressPubKey(pubKey))
+//
+//        val msg = "Message for signing"
+//        val msgHash = Hash.sha3(msg.toByteArray())
+//        val signature = Sign.signMessage(msgHash, keyPair, false)
+//        println("Msg: $msg")
+//        System.out.println("Msg hash: " + Hex.toHexString(msgHash))
+//        System.out.printf(
+//            "Signature: [ r = %s, s = %s]\n",
+//            Hex.toHexString(signature.r),
+//            Hex.toHexString(signature.s)
+//        )
+//
+//        val pubKeyRecovered = Sign.signedMessageToKey(msg.toByteArray(), signature)
+//        println("Recovered public key: " + pubKeyRecovered.toString(16))
+//
+//        val validSig = pubKey == pubKeyRecovered
+//        println("Signature valid? $validSig")
+//
+//        return (signature.r+signature.s)
+
+
+
+
+
+
+
+    }
 
 
     companion object {
