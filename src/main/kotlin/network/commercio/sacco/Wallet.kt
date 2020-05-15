@@ -13,6 +13,8 @@ import org.kethereum.bip39.generateMnemonic
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.toKey
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
+import org.kethereum.crypto.toECKeyPair
+import org.kethereum.extensions.toHexString
 import org.kethereum.extensions.toHexStringNoPrefix
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
@@ -51,6 +53,7 @@ data class Wallet internal constructor(
             val pubKeyCompressed = pubKeyPoint.getEncoded(true)
             val fullPublicKey = (type + pubKeyCompressed).convertBits()
             return Bech32.encode(prefix, fullPublicKey)
+
         }
 
     /**
@@ -58,7 +61,12 @@ data class Wallet internal constructor(
      */
     private val privateEcKey: ECKey
         get() {
-            val privateKeyHex = privateKey.key.toHexStringNoPrefix()
+           //corrisponde a print("\nprivateKeyHex: ${HEX.encode(privateKey)}");
+            print("\n\nprivateKey.keytoHexStringNoPrefix: ${privateKey.key.toHexStringNoPrefix()}")
+           val privateKeyHex = privateKey.key.toHexStringNoPrefix()
+            print("\nprivateKeyInt: ${BigInteger(privateKeyHex, 16)}")
+            print("\nresult from privateEcKey: ${ECKey.fromPrivate(BigInteger(privateKeyHex, 16))
+            }")
             return ECKey.fromPrivate(BigInteger(privateKeyHex, 16))
         }
 
@@ -117,10 +125,14 @@ data class Wallet internal constructor(
      */
     fun sign(data: ByteArray): ByteArray {
         return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
-            initSign(ecPrivateKey)
-            update(data)
+            val a =initSign(ecPrivateKey)
+            print("\ninitSign(ecPrivateKey): ${a.toString()}")
+            val b= update(data)
+            print("\nupdate(data): ${b.toString()}")
         }.sign()
     }
+
+
 
     companion object {
         private const val BASE_DERIVATION_PATH = "m/44'/118'/0'/0"

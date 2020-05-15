@@ -70,9 +70,12 @@ internal object LCDService {
      * @throws Exception if something goes wrong while reading the data.
      */
     suspend fun getAccountData(wallet: Wallet): AccountData {
+        print("\n\nLCDService.getAccountData: \n\n")
         // Get the account data
         val accountEndpoint = "${wallet.networkInfo.lcdUrl}/auth/accounts/${wallet.bech32Address}"
+        print("\n\naccountEndpoint $accountEndpoint \n\n")
         val accountResponse = chainService.getAccountData(accountEndpoint)
+        print("\n\naccountResponse $accountResponse \n\n")
         if (!accountResponse.isSuccessful) {
             throw Exception("Expected status code 200 but got ${accountResponse.code()} - ${accountResponse.errorBody()}")
         }
@@ -84,6 +87,7 @@ internal object LCDService {
         }
 
         val jsonString = objectMapper.writeValueAsString(accountJson["value"] as Map<String, Any>)
+        print("\n\njsonString  $jsonString \n\n")
         return objectMapper.readValue(jsonString, AccountData::class.java)
     }
 

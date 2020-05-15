@@ -22,14 +22,18 @@ object TxSigner {
      * number and sequence number when composing the message signature.
      */
     suspend fun signStdTx(wallet: Wallet, stdTx: StdTx): StdTx {
+        print("\n\nTxSigner.signStdTx:  \n\n")
         // Get the account data from the network
         val account = LCDService.getAccountData(wallet)
+        print("\n\naccount $account\n\n")
 
         // Get the node information
         val nodeInfo = LCDService.getNodeInfo(wallet)
+        print("\n\nnodeInfo $nodeInfo\n\n")
 
         // Sign all messages
         val signatures = getStdSignature(wallet, account, nodeInfo, stdTx.messages, stdTx.fee, stdTx.memo)
+        print("\n\nsignatures $signatures\n\n")
 
 
         // Assemble the transaction
