@@ -152,36 +152,6 @@ data class Wallet internal constructor(
 //        return union
 
 
-        //TENTATIVO N.2
-        // size 64 e aspetto coerente con quella creata in dart.
-        // Non funziona: unauthorized: proof signature verification failed
-
-//        val privKey =privateKey.key
-//        val pubKey = Sign.publicKeyFromPrivate(privKey)
-//        val keyPair = ECKeyPair(privKey, pubKey)
-//        println("Private key: " + privKey.toString(16))
-//        println("Public key: " + pubKey.toString(16))
-//        //System.out.println("Public key (compressed): " + compressPubKey(pubKey))
-//
-//        val msg = "Message for signing"
-//        val msgHash = Hash.sha3(msg.toByteArray())
-//        val signature = Sign.signMessage(msgHash, keyPair, false)
-//        println("Msg: $msg")
-//        System.out.println("Msg hash: " + Hex.toHexString(msgHash))
-//        System.out.printf(
-//            "Signature: [ r = %s, s = %s]\n",
-//            Hex.toHexString(signature.r),
-//            Hex.toHexString(signature.s)
-//        )
-//
-//        val pubKeyRecovered = Sign.signedMessageToKey(msg.toByteArray(), signature)
-//        println("Recovered public key: " + pubKeyRecovered.toString(16))
-//
-//        val validSig = pubKey == pubKeyRecovered
-//        println("Signature valid? $validSig")
-//
-//        return (signature.r+signature.s)
-
 
         //TENTATIVO N.2
         // size 64 e aspetto coerente con quella creata in dart.
