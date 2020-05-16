@@ -99,7 +99,7 @@ class WalletTests {
         val data = "Test"
         val sig1 = Hex.toHexString(wallet.sign(data.toByteArray()))
         val sig2 = Hex.toHexString(wallet.sign(data.toByteArray()))
-        assertNotEquals(sig1, sig2)
+        assertEquals(sig1, sig2)
     }
 
     @Test

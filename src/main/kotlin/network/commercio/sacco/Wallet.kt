@@ -2,16 +2,14 @@ package network.commercio.sacco
 
 import network.commercio.sacco.crypto.TransactionSigner
 import network.commercio.sacco.crypto.convertBits
-import network.commercio.sacco.encoding.toBase64
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.Sha256Hash
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECNamedCurveSpec
 import org.bouncycastle.jce.spec.ECPrivateKeySpec
 import org.bouncycastle.math.ec.ECPoint
-import org.bouncycastle.util.encoders.Base64
-import org.bouncycastle.util.encoders.Hex
 import org.kethereum.bip39.generateMnemonic
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.toKey
@@ -21,15 +19,10 @@ import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
 import org.web3j.crypto.ECDSASignature
 import org.web3j.crypto.ECKeyPair
-import org.web3j.crypto.Hash
-import org.web3j.crypto.Sign
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.MessageDigest
-import java.security.SecureRandom
-import java.security.Signature
 import java.security.spec.ECPublicKeySpec
-import java.util.Base64.getEncoder
 
 
 /**
@@ -56,6 +49,11 @@ data class Wallet internal constructor(
     val bech32PublicKey: String
         get() {
             val type = byteArrayOf(235.toByte(), 90, 233.toByte(), 135.toByte(), 33)
+
+//            type.forEach { print("$it, ") }
+//            print("\n")
+//            type.forEach { print("${it.inv()}, ") }
+//            print("\n")
             val prefix = networkInfo.bech32Hrp + "pub"
             val pubKeyCompressed = pubKeyPoint.getEncoded(true)
             val fullPublicKey = (type + pubKeyCompressed).convertBits()
@@ -125,20 +123,23 @@ data class Wallet internal constructor(
     fun sign(data: ByteArray): ByteArray {
 
 //        ORIGINALE SACCO.KT --- togliendo BouncyCastleProvider () diventa deterministica
-        return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
-            initSign(ecPrivateKey)
-            update(data)
-        }.sign()
+//        return Signature.getInstance("SHA256WithECDSA", BouncyCastleProvider()).apply {
+//            initSign(ecPrivateKey)
+//            update(data)
+//        }.sign()
 
 
         //TENTATIVO N.1
         // size 64 e aspetto coerente con quella creata in dart.
         // Non funziona: unauthorized: proof signature verification failed
 
+
+
 //        val eCDSASignature: ECDSASignature = ECKeyPair(privateKey.key, publicKey.key).sign(data)
-//        val R = eCDSASignature.r
-//        val S = eCDSASignature.s
-//        val union = (R.toByteArray() + S.toByteArray())
+//        val eCDSASignatureCanonicalised = eCDSASignature.toCanonicalised()
+//        val R = eCDSASignatureCanonicalised.r
+//        val S = eCDSASignatureCanonicalised.s
+//        val union = R.toByteArray() + S.toByteArray()
 //
 //
 //        print("\nMetodo sign del Wallet di sacco:\neCDSASignature:  \n ${eCDSASignature.r} \n  ${eCDSASignature.s}")
@@ -151,8 +152,42 @@ data class Wallet internal constructor(
 //
 //        return union
 
+        //TENTATIVO N.4
+        // size 64 e aspetto coerente con quella creata in dart.
+//        val eCDSASignatur: ECDSASignature = ECKeyPair(privateKey.key, publicKey.key).sign(data).toCanonicalised()
+//        val signature = eCDSASignatur
+//
+//        val result = ByteArray(64)
+//        val rBytes = Utils.bigIntegerToBytes(signature.r, 32)
+//        val sBytes = Utils.bigIntegerToBytes(signature.s, 32)
+//
+//        rBytes.copyInto(result, destinationOffset = 0, startIndex = 0, endIndex = rBytes.size)
+//        sBytes.copyInto(result, destinationOffset = 32, startIndex = 0, endIndex = sBytes.size)
+//
+//        return result
+
+        //TENTATIVO N.5
+
+//        val hash = Sha256Hash.wrap(data.toBase64());
+//        print("\nHASH:" + hash)
+//        val signature = privateEcKey.sign(hash)
+//        print("\nSIGNATURE:" + signature.toString())
+//        val R = signature.r
+//        val S = signature.s
+//        return (R.toByteArray() + S.toByteArray())
+
+        //TENTATIVO N.6
+
+        val hashTransaction = Sha256Hash.wrap(Sha256Hash.hash(data))
+        print("\nhashTransaction:" + hashTransaction)
+        val signature = privateEcKey.sign(hashTransaction)
+        print("\nSIGNATURE:" + signature.toString())
+        val R = signature.r
+        val S = signature.s
+        return (R.toByteArray() + S.toByteArray())
 
 
+        return data
         //TENTATIVO N.2
         // size 64 e aspetto coerente con quella creata in dart.
         // Non funziona: unauthorized: proof signature verification failed
@@ -182,7 +217,6 @@ data class Wallet internal constructor(
 ////        println("Signature valid? $validSig")
 //
 //        return (signature.r+signature.s)
-
 
 
         //TENTATIVO N.3
