@@ -6,6 +6,7 @@ import org.bouncycastle.util.encoders.Hex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
+import java.nio.charset.StandardCharsets
 
 class DeleteTests {
 
@@ -34,18 +35,15 @@ class DeleteTests {
 
         wallet.bech32PublicKey
 
-        val data = "{\"@context\":\"https://www.w3.org/ns/did/v1\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\"," +
-                "\"publicKey\":[{" +
-                "\"controller\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48#keys-1\"," +
-                "\"publicKeyPem\":\"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoGDuSJKSkwvYPEafx6VpL2k8UZzJyXVJIXv9HLAe9cy9QMEsLzJi8CgoJSKKVRdUyV+wpESiTnT2v5ZEUvT9qMqvdNk/r5ojDDAuK+xgDvQnpabfOdpKC0jty72+ERW0GjV+q4F5MJoLOu8+UFzSu/dpr3vimq11f5LXjRnQmrV5S+eGotYfhlqvZ6UZg/u81H9QtonKL7VT0iFCznCm1wZoFS8Em5s0rQKFbbSBobO5hu6zgum4LhQY3++2p5Q+0GI5JiF0VzLB8Zl5VAQvQwE9Mm8cmo1UbYdDTZBP6UszMJXUWJhVeifTDXsC1bPaCPgE34E7++GUjLb2dcZE8wIDAQAB\\n-----END PUBLIC KEY-----\"," +
-                "\"type\":\"RsaVerificationKey2018\"}," +
-                "{\"controller\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48#keys-2\"," +
-                "\"publicKeyPem\":\"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu/2FnyCyk1kVHu88Y23O/iYK7Tsc/pXZoZ4gGx1GaapZieYKC6c085rLzAGYnSehd/6gRd7Uc8FmKeoffFMjtzp7zNKLSWaHTL51iYwJ8FUi9J+fH4B4dRdR0ouMrBFth/lGd2sPqL79FFrAqkQwvcez5VKnxhoK9cPTIKskZS7NlBFbfifO8ry2XKRelyUiLV1nEKas2SHQ5cpMKfvk46bMOLk8MZFkBoYHohyUczaKN72a/EpGlahSAhgH33Zmqb0++AfOwXXGvaYhxxxc7s1PZP81voAA0rkUTYkW0a9tJKXpql2ZQrTF+RSTZq4u/G7Re44CrVCJR22Er+GNXwIDAQAB\\n-----END PUBLIC KEY-----\",\"type\":\"RsaSignatureKey2018\"}]}";
+        //val data1 = "{\"@context\":\"https://www.w3.org/ns/did/v1\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\",\"publicKey\":[{\"controller\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48#keys-1\",\"publicKeyPem\":\"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoGDuSJKSkwvYPEafx6VpL2k8UZzJyXVJIXv9HLAe9cy9QMEsLzJi8CgoJSKKVRdUyV+wpESiTnT2v5ZEUvT9qMqvdNk/r5ojDDAuK+xgDvQnpabfOdpKC0jty72+ERW0GjV+q4F5MJoLOu8+UFzSu/dpr3vimq11f5LXjRnQmrV5S+eGotYfhlqvZ6UZg/u81H9QtonKL7VT0iFCznCm1wZoFS8Em5s0rQKFbbSBobO5hu6zgum4LhQY3++2p5Q+0GI5JiF0VzLB8Zl5VAQvQwE9Mm8cmo1UbYdDTZBP6UszMJXUWJhVeifTDXsC1bPaCPgE34E7++GUjLb2dcZE8wIDAQAB\\n-----END PUBLIC KEY-----\",\"type\":\"RsaVerificationKey2018\"},{\"controller\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48\",\"id\":\"did:com:150jp3tx96frukqg6v870etf02q0cp7em78wu48#keys-2\",\"publicKeyPem\":\"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu/2FnyCyk1kVHu88Y23O/iYK7Tsc/pXZoZ4gGx1GaapZieYKC6c085rLzAGYnSehd/6gRd7Uc8FmKeoffFMjtzp7zNKLSWaHTL51iYwJ8FUi9J+fH4B4dRdR0ouMrBFth/lGd2sPqL79FFrAqkQwvcez5VKnxhoK9cPTIKskZS7NlBFbfifO8ry2XKRelyUiLV1nEKas2SHQ5cpMKfvk46bMOLk8MZFkBoYHohyUczaKN72a/EpGlahSAhgH33Zmqb0++AfOwXXGvaYhxxxc7s1PZP81voAA0rkUTYkW0a9tJKXpql2ZQrTF+RSTZq4u/G7Re44CrVCJR22Er+GNXwIDAQAB\\n-----END PUBLIC KEY-----\",\"type\":\"RsaSignatureKey2018\"}]}"
 
-        val sig1 = wallet.sign(data.toByteArray())
-        val sig2 = wallet.sign(data.toByteArray())
-        val sig3 = wallet.sign(data.toByteArray())
-        val sig4 = wallet.sign(data.toByteArray())
+        val data ="Test2"
+
+
+        val sig1 = wallet.sign(data.toByteArray(Charsets.UTF_8))
+        val sig2 = wallet.sign(data.toByteArray(Charsets.UTF_8))
+        val sig3 = wallet.sign(data.toByteArray(Charsets.UTF_8))
+        val sig4 = wallet.sign(data.toByteArray(Charsets.UTF_8))
 
 
 
@@ -55,8 +53,6 @@ class DeleteTests {
 
         print("\n sig1\n")
         print(sig1.toBase64())
-
-
 
 
         print("\n\n sig2 \n size: ${sig2.size} \n")
@@ -79,6 +75,7 @@ class DeleteTests {
         print("\n")
         assertEquals(false, false);
     }
+
 
 //    Rpm8XKrPHorpiypZRlm9bz0nIGRZvIEKM9y2blJk7kB4jNW+p+uY1M7hBn0kDMffeqpx1DxS7FGozYAmK/TE0g==
 //    MEQCIG3HOqRTzGszB+bijsR/BQyXjFWWkAI1beOpkxCk7hFVAiBd3b0YpLONlDVxTehBX29bt0qhLUsrEcAJYo46QQPCmA==
