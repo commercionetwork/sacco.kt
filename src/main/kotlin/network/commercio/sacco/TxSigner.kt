@@ -61,10 +61,10 @@ object TxSigner {
         // Create the signature object
         val signature = StdSignatureMessage(
             chainId = nodeInfo.info.chainId,
-            accountNumber = account.accountNumber,
+            accountNumber = account.accountNumber.toString(),
             memo = memo,
             msgs = msgs,
-            sequence = account.sequence,
+            sequence = account.sequence.toString(),
             fee = fee
         )
 

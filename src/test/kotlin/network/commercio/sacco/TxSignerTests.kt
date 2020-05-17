@@ -55,8 +55,9 @@ class TxSignerTests {
         }
     }
 
+
     @Test
-    fun `StdTx with fee is signed with another value if AccountData has accountNumber and sequence as Integer`() {
+    fun `StdTx with fee is signed with the same value if AccountData has accountNumber and sequence as Integer`() {
         val networkInfo = NetworkInfo(
             bech32Hrp = "cosmos",
             lcdUrl = "http://localhost:1317"
@@ -83,8 +84,7 @@ class TxSignerTests {
 
             val signature = signedTx.signatures!![0]
             assertEquals("tendermint/PubKeySecp256k1", signature.pubKey.type)
-            assertEquals("ArMO2T5FNKkeF2aAZY012p/cpa9+PqKqw2GcQRPhAn3w", signature.pubKey.value)
-            assertNotEquals(
+            assertEquals(
                 "m2op4CCBa39fRZD91WiqtBLKbUQI+1OWsc1tJkpDg+8FYB4y51KahGn26MskVMpTJl5gToIC1pX26hLbW1Kxrg==",
                 signature.value
             )

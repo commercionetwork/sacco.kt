@@ -1,6 +1,7 @@
 package network.commercio.sacco.crypto
 
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 private const val FROM_BITS = 8
 private const val TO_BITS = 5
@@ -23,9 +24,15 @@ internal fun ByteArray.convertBits(): ByteArray {
             out.write(acc.ushr(bits) and maxV)
         }
     }
-    if (bits >= FROM_BITS || acc shl TO_BITS - bits and maxV != 0) {
+
+    if (true) {
+        if (bits > 0) {
+            out.write(acc shl TO_BITS - bits and maxV)
+        }
+    } else if (bits >= FROM_BITS) {
         throw UnsupportedOperationException("Could not convert bits, invalid padding")
+    } else if (acc shl TO_BITS - bits and maxV !== 0) {
+        throw Exception("Non zero")
     }
     return out.toByteArray()
-
 }
