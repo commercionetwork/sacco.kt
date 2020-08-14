@@ -1,5 +1,8 @@
 package network.commercio.sacco
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.future.*
+import java.util.concurrent.CompletableFuture
 import network.commercio.sacco.models.types.StdTx
 import network.commercio.sacco.utils.LCDService
 
@@ -8,6 +11,9 @@ import network.commercio.sacco.utils.LCDService
  * inside the specified [Wallet] instance.
  */
 object TxSender {
+
+    fun broadcastStdTxAsync(stdTx: StdTx, wallet: Wallet, mode: String = "sync"): CompletableFuture<TxResponse> =
+      GlobalScope.future { broadcastStdTx(stdTx, wallet, mode) }
 
     /**
      * Broadcasts the given [stdTx] using the info contained inside the given [wallet] using the proper [mode] given
