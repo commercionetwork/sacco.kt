@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.future.*
+import java.util.concurrent.CompletableFuture
 import network.commercio.sacco.encoding.toBase64
 import network.commercio.sacco.models.account.AccountData
 import network.commercio.sacco.models.chain.NodeInfo
@@ -14,6 +17,9 @@ import network.commercio.sacco.utils.LCDService
  * Allows to easily sign a [StdTx] object that already contains a message.
  */
 object TxSigner {
+
+    fun signStdTxAsync(wallet: Wallet, stdTx: StdTx): CompletableFuture<StdTx> =
+      GlobalScope.future { signStdTx(wallet, stdTx) }
 
     /**
      * Signs the given [stdTx] using the data contained inside the given [wallet].

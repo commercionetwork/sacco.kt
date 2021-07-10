@@ -144,6 +144,17 @@ data class Wallet internal constructor(
             )
         }
 
+        fun derive(
+            mnemonic: List<String>, networkInfo: NetworkInfo, derivationPath: String
+        ): Wallet {
+            val keyPair = MnemonicWords(mnemonic).toKey(derivationPath).keyPair
+            return Wallet(
+                privateKey = keyPair.privateKey,
+                publicKey = keyPair.publicKey,
+                networkInfo = networkInfo
+            )
+        }
+
         /**
          * Generates a new random wallet for the given [networkInfo].
          */
