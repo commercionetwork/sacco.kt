@@ -111,7 +111,7 @@ class LCDServiceTests {
         assertEquals("2CB2471712192815191A679268E4993C67CAD1654FED8F398B698F57EF4A23C1", result.txHash)
     }
 
-    @Test
+    /*@Test
     fun `getAccountData returns the proper result with accountNumber and sequence as Int`() = mockkObject(LCDService) {
 
         val mockService = mockk<ChainService> {
@@ -134,7 +134,7 @@ class LCDServiceTests {
         val accountData = runBlocking { LCDService.getAccountData(wallet) }
         assertEquals(accountData.accountNumber, 47)
         assertEquals(accountData.sequence, 5)
-    }
+    }*/
 
     @Test
     fun `getAccountData returns the proper result with accountNumber and sequence as String`() =
@@ -146,10 +146,12 @@ class LCDServiceTests {
                         "result" to mapOf(
                             "value" to mapOf(
                                 "account_number" to "47",
+                                "address" to "address",
                                 "sequence" to "5",
                                 "coins" to listOf(
                                     mapOf("denom" to "ucommercio", "amount" to "100")
-                                )
+                                ),
+                                "public_key" to mapOf("type" to "tendermint/PubKeySecp256k1", "value" to "AvVH6ZBwkHOJhcbjfTPfICV5u9TJpTm1GMzJQSutafma")
                             )
                         )
                     )

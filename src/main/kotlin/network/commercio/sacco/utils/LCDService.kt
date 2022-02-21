@@ -106,10 +106,13 @@ internal object LCDService {
      */
     suspend fun postTx(stdTx: StdTx, wallet: Wallet, mode: String): TxResponse {
         // Build the request body
-        val requestBody = mapOf("tx" to stdTx, "mode" to mode)
+//        val charset = Charsets.UTF_8
+//        val txBytes = stdTx.toString().toByteArray(charset)
+        val requestBody = mapOf("tx_bytes" to stdTx, "mode" to mode)
 
         // Send the tx
-        val url = "${wallet.networkInfo.lcdUrl}/txs"
+//        val url = "${wallet.networkInfo.lcdUrl}/txs"
+        val url = "${wallet.networkInfo.lcdUrl}/cosmos/tx/v1beta1/txs"
         val response = chainService.postTx(url, requestBody)
         if (!response.isSuccessful) {
             throw Exception("Expected status code 200 but got ${response.code()} - ${response.errorBody()!!.string()}")
